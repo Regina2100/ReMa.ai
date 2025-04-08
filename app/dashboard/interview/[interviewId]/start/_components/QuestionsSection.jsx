@@ -17,7 +17,8 @@ const QuestionsSection = ({ mockInterviewQuestion, activeQuestionIndex, onQuesti
     }
   };
 
-  if (!mockInterviewQuestion) return null;
+  if (!Array.isArray(mockInterviewQuestion) || mockInterviewQuestion.length === 0) return null;
+
 
   return (
     <div className="space-y-6">
