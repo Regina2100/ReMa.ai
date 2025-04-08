@@ -1,8 +1,11 @@
 "use client";
 import { Lightbulb, Volume2 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import InterviewerVideo from "./InterviewerVideo";
 
-const QuestionsSection = ({ mockInterviewQuestion, activeQuestionIndex }) => {
+const QuestionsSection = ({ mockInterviewQuestion, activeQuestionIndex, onQuestionChange }) => {
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  
   const textToSpeech = (text) => {
     if ("speechSynthesis" in window) {
       const speech = new SpeechSynthesisUtterance(text);
@@ -28,7 +31,7 @@ const QuestionsSection = ({ mockInterviewQuestion, activeQuestionIndex }) => {
                 ? "bg-blue-600 text-white shadow-md"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
-            disabled // Since this is just a display, we don't need click functionality here
+            onClick={() => onQuestionChange && onQuestionChange(index)}
           >
             Question #{index + 1}
           </button>
@@ -40,15 +43,28 @@ const QuestionsSection = ({ mockInterviewQuestion, activeQuestionIndex }) => {
         <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">
           {mockInterviewQuestion[activeQuestionIndex]?.question}
         </h2>
-        <button
-          onClick={() =>
-            textToSpeech(mockInterviewQuestion[activeQuestionIndex]?.question)
-          }
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
-        >
-          <Volume2 className="h-5 w-5" />
-          <span className="text-sm font-medium">Listen to Question</span>
-        </button>
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() =>
+              textToSpeech(mockInterviewQuestion[activeQuestionIndex]?.question)
+            }
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+          >
+            <Volume2 className="h-5 w-5" />
+            <span className="text-sm font-medium">Listen to Question</span>
+          </button>
+          
+          <button
+            onClick={() => setIsGeneratingVideo(true)}
+            className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors duration-200"
+          >
+            <span className="text-sm font-medium">Generate Video</span>
+          </button>
+        </div>
+        
+        {isGeneratingVideo && (
+          <InterviewerVideo questionText={mockInterviewQuestion[activeQuestionIndex]?.question} />
+        )}
       </div>
 
       {/* Info Note */}
