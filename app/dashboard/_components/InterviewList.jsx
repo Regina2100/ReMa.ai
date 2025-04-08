@@ -5,8 +5,8 @@ import { useUser } from "@clerk/nextjs";
 import { desc, eq } from "drizzle-orm";
 import React, { useEffect, useState } from "react";
 import InterviewItemCard from "./InterviewItemCard";
-import { Loader2, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 const InterviewList = () => {
   const { user } = useUser();
@@ -42,43 +42,48 @@ const InterviewList = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-          <FileText className="w-5 h-5 text-indigo-600" />
-          Previous Mock Interviews
-        </h2>
-        <button
-          onClick={fetchInterviewList}
-          className="text-indigo-600 hover:text-indigo-800 text-sm font-medium 
-            flex items-center gap-1 transition-colors"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            "Refresh"
-          )}
-        </button>
-      </div>
+    <div className="space-y-8">
+     
 
-      {/* Loading State */}
+      {/* Content */}
       {isLoading ? (
-        <div className="flex justify-center items-center py-10">
-          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex justify-center items-center py-16"
+        >
+          <Loader2 className="w-10 h-10 animate-spin text-indigo-600" />
+        </motion.div>
       ) : interviewList.length === 0 ? (
-        <div className="text-center py-10">
-          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">No interviews found. Start by creating a new one!</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center py-16 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 shadow-sm"
+        >
+          <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-600 text-lg font-medium">No interviews found</p>
+          <p className="text-gray-500 mt-2">Start by creating a new mock interview to practice your skills!</p>
+        </motion.div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {interviewList.map((interview, index) => (
-            <InterviewItemCard interview={interview} key={index} />
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
+            >
+              <InterviewItemCard interview={interview} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );
