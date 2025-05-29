@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { PlusCircle, TrendingUp, Award, BarChart2, RefreshCw, Loader2, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { db } from "@/utils/db";
-import { MockInterview, UserAnswer } from "@/utils/schema";
+import { MockInterview } from "@/utils/schema";
 import { desc, eq } from "drizzle-orm";
 import AddNewInterview from './_components/AddNewInterview';
 import InterviewItemCard from './_components/InterviewItemCard';

@@ -76,7 +76,14 @@ function AddNewInterview({ isOpen, onClose }) {
       const result = await chatSession.sendMessage(inputPrompt);
       const responseText = await result.response.text();
       const cleanedResponse = responseText.replace(/```json\n?|```/g, '').trim();
-      const mockResponse = JSON.parse(cleanedResponse);
+
+      // This helper function escapes problematic characters in string values
+      function sanitizeJSONString(str) {
+        return str.replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
+      }
+
+      const sanitized = sanitizeJSONString(cleanedResponse);
+      const mockResponse = JSON.parse(sanitized);
 
       const res = await db.insert(MockInterview)
         .values({
